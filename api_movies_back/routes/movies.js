@@ -64,4 +64,24 @@ app.get('/movies/:id/genres',function(req,res){
         })
 })
 
+app.get('/movies/:id/producers',function(req,res){
+    console.log(req.body);
+    const id = req.params.id
+
+    db.query(`SELECT name FROM producers INNER JOIN movies ON producer_id = producers.id WHERE movies.id = ${id};`, function(err, rows){
+    if(err){
+      res.json({
+        msg: 'error'
+      });
+    }
+        else{
+            res.json({
+                msg: 'succes',
+                movies: rows
+              });
+        console.log(res);
+    }
+        })
+})
+
 module.exports = app;
