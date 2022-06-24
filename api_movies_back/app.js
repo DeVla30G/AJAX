@@ -28,6 +28,14 @@ app.use(function(err, req, res, next) {
     res.send({code: err.status, message: res.locals.message});
   });
 
+  db.connect(function ConnectionHandler(err){
+    if (err){
+        console.log('Unable to connect to MySQL');
+        process.exit(1);
+    }
+    console.log("Connection to MySQL Successful");
+});
+
 app.get('/', (req, res) => {
     res.send('Hello Vladi!')
   })
