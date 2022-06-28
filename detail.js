@@ -34,7 +34,7 @@ function getMovie(){
                        <a href="index.html" class="btn btn-danger">Go back</a>
                     </div>
                     `
-                    document.getElementById("movies").innerHTML = output;
+                    document.getElementById("results").innerHTML = output;
                 }
             }
             xhr.onerror = () => {
