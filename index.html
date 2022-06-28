@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css"> 
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png"> 
+    <!--<a target="_blank" href="https://icons8.com/icon/42542/etoile-d'hollywood">Etoile d'Hollywood</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>-->
+    <script src="./script.js"></script>
+    <title>XMLHttpRequest exemple for movies search </title>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <ul class="navSection">
+              <li class="collection-items"><a href="#">Movies</a></li>
+              <li class="collection-item"><a href="#">Producers</a></li>
+              <li class="collection-item"><a href="#">By year</a></li>
+            </ul>
+
+            <div class="MovieSearch">
+              <div class="searchBar">
+                <input type="text" name="search" value="" autocomplete="on" id="myInput" class="form-control" placeholder="" />   
+                <button>SEARCH</button> 
+              </div>
+            </div>
+        </div>
+              <ul class="listGroup" id="list"></ul>
+    </header>
+    <div class="wrap_results">
+      <div class="results" >
+        <h1>Movies:</h1>
+        <h4 id="results"></h4>
+      </div>
+    </div>
+
+    
+</body>
+</html>

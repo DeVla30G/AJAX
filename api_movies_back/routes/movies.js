@@ -21,6 +21,7 @@ const db = require('../config/db');
         console.log(res);
     }
         })
+        console.log(res)
 })
 
 /**get one movie by id */
@@ -42,8 +43,10 @@ app.get('/movies/:id',function(req,res){
         console.log(res);
     }
         })
+        console.log(res)
 })
 
+/**get genre of selected movie */
 app.get('/movies/:id/genres',function(req,res){
     console.log(req.body);
     const id = req.params.id
@@ -64,11 +67,35 @@ app.get('/movies/:id/genres',function(req,res){
         })
 })
 
+/**get producer of movie by id */
 app.get('/movies/:id/producers',function(req,res){
     console.log(req.body);
     const id = req.params.id
 
     db.query(`SELECT name FROM producers INNER JOIN movies ON producer_id = producers.id WHERE movies.id = ${id};`, function(err, rows){
+    if(err){
+      res.json({
+        msg: 'error'
+      });
+    }
+        else{
+            res.json({
+                msg: 'succes',
+                movies: rows
+              });
+        console.log(res);
+    }
+        })
+})
+
+// SELECT title FROM movies INNER JOIN genres ON genre_id = genres.id WHERE genres.name = 'drama';
+
+/**get titles of movies by genre */
+app.get('/movies/:genre',function(req,res){
+    console.log(req.body);
+    const genre = req.params.genre
+
+    db.query(`SELECT title FROM movies INNER JOIN genres ON genre_id = genres.id WHERE genres.name = ${genre};`, function(err, rows){
     if(err){
       res.json({
         msg: 'error'

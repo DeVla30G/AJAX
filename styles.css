@@ -1,0 +1,42 @@
+body{
+    background-color: rgb(210, 212, 213);
+    margin: 0;
+}
+header{
+    display: grid;
+    grid-template-columns:repeat 2(3fr 1fr);
+    background-color: rgb(46, 43, 43); 
+}
+.navbar{
+    position: static;
+    top: 0;
+    float: right;
+}
+
+.navSection{
+    display: flex;
+    list-style-type: none;
+    font-size: 2em;
+    font-weight: 500; 
+}
+.navSection a {
+    display: inline-block;
+    text-decoration: none;
+    color: rgb(123, 119, 119);
+    display: inline-block;
+}
+.navbar li{
+    margin: 1em;
+}
+.MovieSearch{
+    margin: 1em;
+}
+input, button{
+    height: 2em;
+}
+.wrap_results{
+    height: calc(100vh-80px);
+    width: 90%;
+    border: 2px solid black;
+    margin: 2em auto;
+}
