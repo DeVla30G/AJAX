@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css"> 
     <link rel="icon" type="image/x-icon" href="/images/favicon.png"> 
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@300" rel="stylesheet">
     <!--<a target="_blank" href="https://icons8.com/icon/42542/etoile-d'hollywood">Etoile d'Hollywood</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>-->
     <script src="./script.js"></script>
     <title>XMLHttpRequest exemple for movies search </title>
@@ -31,7 +32,10 @@
     <div class="wrap_results">
       <div id="results">
       </div>
+      <a href="javascript:prevPage()" id="btn_prev">Prev</a>&nbsp;
+      <a href="javascript:nextPage()" id="btn_next">Next</a><br>
+      page: <span id="page"></span>
     </div>
-    
+
 </body>
 </html>
