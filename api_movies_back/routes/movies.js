@@ -111,4 +111,23 @@ app.get('/movies/:genre',function(req,res){
         })
 })
 
-module.exports = app;
+/**search query */
+
+app.get('/movies/search', function(req, res){
+  console.log(req.body);
+  const search = req.query.term
+
+  db.query(`SELECT title FROM movies WHERE name LIKE "'% + ${search} + %'"`, 
+  function(err, rows, fields) {
+    if (err) throw err;
+    var data = [];
+    for (i = 0; i < rows.lenght; i++) {
+      data.push(rows[i].name);
+    }
+    res.end(JSON.stringify(data));
+  });
+});
+
+module.exports = app;{
+
+}

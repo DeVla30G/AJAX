@@ -1,94 +1,223 @@
-window.onload = function(){
+window.onload = () => {
+const searchInput = document.querySelector("#myInput");
+const movieTemplate = document.querySelector("#result"); 
+const movieCardContainer = document.querySelector('#card-container')
 
-    let searchText = document.getElementsByTagName("input")[0];
-    let searchBtn = document.getElementsByTagName("button")[0];
-    let box = document.getElementById('results');
-    let output = "";
-    let myInputValue = document.getElementById("myInput").value;
+let movies = [];
+
+searchInput.addEventListener("input", e => {
+  const value = e.target.value
+  console.log(value, 'value')
+  movies.forEach(movie => {
+     const isVisible = 
+     movie.title.toLowerCase().includes(value) || 
+     movie.prod_year.toLowerCase().includes(value);
+     console.log(movie.title)
+     movie.element.classList.toggle("hide", !isVisible)
+  })
+ 
+})
 
 
   fetch('http://localhost:3000/api/movies')
-      .then(response => { 
-          console.log(response);  
-          return response.json();  })
+      .then(response =>{ 
+        console.log(response);
+        return response.json();
+      })
       .then((data) => { 
-          console.log(data.movies)
-      const resultM = data.movies
+        console.log(data.movies)
+        const resultM = data.movies
+        movies = resultM.slice(0, 10).map( movie => {
+          const card = movieTemplate.cloneNode(true).children[0]
+          const header = card.querySelector('.title')
+          const body = card.querySelector('.body')
+          const footer = card.querySelector('.footer')
 
-      resultM.slice(0, 20).forEach(element => {
-              console.log(element)
-              console.log(element.title)
-              console.log(element.prod_year)
-              console.log(element.id)
+          header.textContent = movie.title
+          body.textContent = movie.summary
+          footer.textContent = movie.prod_year
+          movieCardContainer.append(card)
+      return { title: movie.title, info: movie.summary, year: movie.prod_year, id: movie.id, element: movieTemplate}
+                  });
+             
+                })     
+      
+                      
 
-              results.innerHTML +=    
-              `<div class="result">
-                  <div class="well text-center">
-                    <h3>${element.title}</h3>
-                    <p>${element.summary}</p>
-                    <p>Production: ${element.prod_year}</p>
-                    <button onclick="getMovieId('${element.id}')" class="btn btn-primary" > + MORE</button>
-                  </div>
-               </div>`
-                      });
-                 
-                    })
-                
-  
-                  }
+              }
 
-  function getMovieId(id){
-      sessionStorage.setItem('movie_id', element.id);
-      window.location = 'movie.html';
-      return false;
-    }
- 
+
+
     /**Pagination */
 
-  const obj = [{N1, N2, N3, N4, N5}]
-    var current_page = 1;
-    var obj_per_page = 3;
-  function totNumPages(){
-      return Math.ceil(obj.length / obj_per_page);
-                  }         
-  function prevPage(){
-      if (current_page > 1) {
-          current_page--;
-          change(current_page);}
-      }
-  function nextPage(){
-      if (current_page < totNumPages()) {
-          current_page++;
-          change(current_page);}
-      }
-  function change(page){
-      var btn_next = document.getElementById("btn_next");
-      var btn_prev = document.getElementById("btn_prev");
-      var listing_table = document.getElementById("TableList");
-      var page_span = document.getElementById("page");
-          if (page < 1) page = 1;
-          if (page > totNumPages()) page = totNumPages();
-            listing_table.innerHTML = "";
-              for (var i = (page-1) * obj_per_page; i < (page * obj_per_page); i++) {
-              listing_table.innerHTML += obj[i].number + "<br>";
-                      }
-            page_span.innerHTML = page;
-              if (page == 1) {
-              btn_prev.style.visibility = "hidden";
-                } else {
-              btn_prev.style.visibility = "visible";
-                      }
-              if (page == totNumPages()) {
-              btn_next.style.visibility = "hidden";
-                } else {
-              btn_next.style.visibility = "visible";
-                      }
-                  }
 
+var Pagination = {
+
+  code: '',
+
+  // --------------------
+  // Utility
+  // --------------------
+
+  // converting initialize data
+  Extend: function(data) {
+      data = data || {};
+      Pagination.size = data.size || 300;
+      Pagination.page = data.page || 1;
+      Pagination.step = data.step || 3;
+  },
+
+  // add pages by number (from [s] to [f])
+  Add: function(s, f) {
+      for (var i = s; i < f; i++) {
+          Pagination.code += '<a>' + i + '</a>';
+      }
+  },
+
+  // add last page with separator
+  Last: function() {
+      Pagination.code += '<i>...</i><a>' + Pagination.size + '</a>';
+  },
+
+  // add first page with separator
+  First: function() {
+      Pagination.code += '<a>1</a><i>...</i>';
+  },
+
+
+
+  // --------------------
+  // Handlers
+  // --------------------
+
+  // change page
+  Click: function() {
+      Pagination.page = +this.innerHTML;
+      Pagination.Start();
+  },
+
+  // previous page
+  Prev: function() {
+      Pagination.page--;
+      if (Pagination.page < 1) {
+          Pagination.page = 1;
+      }
+      Pagination.Start();
+  },
+
+  // next page
+  Next: function() {
+      Pagination.page++;
+      if (Pagination.page > Pagination.size) {
+          Pagination.page = Pagination.size;
+      }
+      Pagination.Start();
+  },
+
+
+
+  // --------------------
+  // Script
+  // --------------------
+
+  // binding pages
+  Bind: function() {
+      var a = Pagination.e.getElementsByTagName('a');
+      for (var i = 0; i < a.length; i++) {
+          if (+a[i].innerHTML === Pagination.page) a[i].className = 'current';
+          a[i].addEventListener('click', Pagination.Click, false);
+      }
+  },
+
+  // write pagination
+  Finish: function() {
+      Pagination.e.innerHTML = Pagination.code;
+      Pagination.code = '';
+      Pagination.Bind();
+  },
+
+  // find pagination type
+  Start: function() {
+      if (Pagination.size < Pagination.step * 2 + 6) {
+          Pagination.Add(1, Pagination.size + 1);
+      }
+      else if (Pagination.page < Pagination.step * 2 + 1) {
+          Pagination.Add(1, Pagination.step * 2 + 4);
+          Pagination.Last();
+      }
+      else if (Pagination.page > Pagination.size - Pagination.step * 2) {
+          Pagination.First();
+          Pagination.Add(Pagination.size - Pagination.step * 2 - 2, Pagination.size + 1);
+      }
+      else {
+          Pagination.First();
+          Pagination.Add(Pagination.page - Pagination.step, Pagination.page + Pagination.step + 1);
+          Pagination.Last();
+      }
+      Pagination.Finish();
+  },
+
+
+
+  // --------------------
+  // Initialization
+  // --------------------
+
+  // binding buttons
+  Buttons: function(e) {
+      var nav = e.getElementsByTagName('a');
+      nav[0].addEventListener('click', Pagination.Prev, false);
+      nav[1].addEventListener('click', Pagination.Next, false);
+  },
+
+  // create skeleton
+  Create: function(e) {
+
+      var html = [
+          '<a>&#9668;</a>', // previous button
+          '<span></span>',  // pagination container
+          '<a>&#9658;</a>'  // next button
+      ];
+
+      e.innerHTML = html.join('');
+      Pagination.e = e.getElementsByTagName('span')[0];
+      Pagination.Buttons(e);
+  },
+
+  // init
+  Init: function(e, data) {
+      Pagination.Extend(data);
+      Pagination.Create(e);
+      Pagination.Start();
+  }
+};
+
+
+
+/* * * * * * * * * * * * * * * * *
+* Initialization
+* * * * * * * * * * * * * * * * */
+
+var init = function() {
+  Pagination.Init(document.getElementById('pagination'), {
+      size: 30, // pages size
+      page: 1,  // selected page
+      step: 3   // pages before and after current
+  });
+};
+
+document.addEventListener('DOMContentLoaded', init, false);
+
+     
             //let valueR = searchText.value;
 
-       
-                    
+ 
+  
+            function getMovieId(id){
+              sessionStorage.setItem('movie_id', element.id);
+              window.location = 'movie.html';
+              return false;
+            }
 /*
        fetch('http://localhost:3000/api/movies')
                 .then(response => { 
